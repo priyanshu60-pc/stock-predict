@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 47.9 95.8% 53.1%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+  }
+}
+
+/* -- Header -------------------------------------- */
+.header {
+  @apply bg-gray-900/80 backdrop-blur-sm border-b border-gray-800;
+}
+
+.header-wrapper {
+  @apply flex items-center justify-between h-16 px-4;
+}
+
+/* -- Nav Items ------------------------------------ */
+.nav-link {
+  @apply text-sm font-medium text-gray-400 hover:text-yellow-400 transition-colors duration-200;
+}
+
+.nav-link-active {
+  @apply text-yellow-400;
+}
+
+/* -- Dashboard / Home ------------------------------ */
+.home-wrapper {
+  @apply flex flex-col gap-8;
+}
+
+.home-section {
+  @apply grid w-full gap-6 grid-cols-1 md:grid-cols-3;
+}
+
+/* -- Trading View ---------------------------------- */
+.custom-chart {
+  @apply rounded-xl overflow-hidden border border-gray-800;
+}
+
+/* -- Auth Layout ----------------------------------- */
+.auth-layout {
+  @apply flex min-h-screen;
+}
+
+.auth-left {
+  @apply flex flex-col justify-between w-full max-w-md px-8 py-10 mx-auto lg:mx-0;
+}
+
+.auth-right {
+  @apply hidden lg:flex flex-1 flex-col justify-between bg-gray-900 border-l border-gray-800 p-10 relative overflow-hidden;
+}
+
+/* -- Watchlist Card -------------------------------- */
+.stock-card {
+  @apply bg-gray-900 border border-gray-800 rounded-xl p-4 hover:border-yellow-500/30 transition-colors;
+}
+
+/* -- Scrollbar hide -------------------------------- */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* -- Yellow button -------------------------------- */
+.yellow-btn {
+  @apply bg-yellow-400 text-yellow-900 font-semibold hover:bg-yellow-300 transition-colors w-full py-2.5 rounded-lg;
+}
