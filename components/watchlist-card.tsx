@@ -28,16 +28,15 @@ interface Alert {
 interface WatchlistCardProps {
   item: WatchlistItem
   alerts: Alert[]
-  userId: string
 }
 
-export default function WatchlistCard({ item, alerts, userId }: WatchlistCardProps) {
+export default function WatchlistCard({ item, alerts }: WatchlistCardProps) {
   const [showAlertForm, setShowAlertForm] = useState(false)
   const [isRemoving, setIsRemoving] = useState(false)
 
   const handleRemove = async () => {
     setIsRemoving(true)
-    const result = await removeFromWatchlist(item.id, userId)
+    const result = await removeFromWatchlist(item.id)
     if (result.success) {
       toast.success(`${item.symbol} removed from watchlist`)
     } else {
@@ -47,7 +46,7 @@ export default function WatchlistCard({ item, alerts, userId }: WatchlistCardPro
   }
 
   const handleRemoveAlert = async (alertId: string) => {
-    const result = await removeAlert(alertId, userId)
+    const result = await removeAlert(alertId)
     if (result.success) {
       toast.success('Alert removed')
     } else {
@@ -57,7 +56,6 @@ export default function WatchlistCard({ item, alerts, userId }: WatchlistCardPro
 
   return (
     <div className="stock-card flex flex-col gap-4">
-      {/* Stock header */}
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-white font-bold text-lg">{item.symbol}</h3>
@@ -88,7 +86,6 @@ export default function WatchlistCard({ item, alerts, userId }: WatchlistCardPro
         </div>
       </div>
 
-      {/* Mini TradingView chart */}
       <div className="rounded-lg overflow-hidden bg-gray-950 h-32">
         <TradingViewWidget
           scriptUrl={`${WIDGET_BASE_URL}mini-symbol-overview.js`}
@@ -97,16 +94,13 @@ export default function WatchlistCard({ item, alerts, userId }: WatchlistCardPro
         />
       </div>
 
-      {/* Alert form */}
       {showAlertForm && (
         <AlertForm
           symbol={item.symbol}
-          userId={userId}
           onSuccess={() => setShowAlertForm(false)}
         />
       )}
 
-      {/* Active alerts */}
       {alerts.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
@@ -124,7 +118,7 @@ export default function WatchlistCard({ item, alerts, userId }: WatchlistCardPro
                   <TrendingDown className="h-3.5 w-3.5 text-red-400" />
                 )}
                 <span className="text-gray-300 text-xs">
-                  {alert.alert_type === 'price' ? '\$' : ''}
+                  {alert.alert_type === 'price' ? '$' : ''}
                   {alert.threshold.toLocaleString()}{' '}
                   <span className="text-gray-500">
                     ({alert.condition} trigger)

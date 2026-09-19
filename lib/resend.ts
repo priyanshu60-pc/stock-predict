@@ -1,8 +1,7 @@
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY!)
-
-const FROM = 'Signalist <alerts@yourdomain.com>'
+const FROM = process.env.RESEND_FROM_EMAIL || 'Signalist <alerts@yourdomain.com>'
 
 /** Send a personalized welcome email to a new user */
 export async function sendWelcomeEmail({

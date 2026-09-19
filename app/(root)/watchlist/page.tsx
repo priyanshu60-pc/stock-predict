@@ -7,14 +7,12 @@ export default async function WatchlistPage() {
   const { userId } = await auth()
   if (!userId) return null
 
-  // Fetch watchlist from Supabase
   const { data: watchlist } = await supabase
     .from('watchlist')
     .select('*')
     .eq('user_id', userId)
     .order('added_at', { ascending: false })
 
-  // Fetch alerts from Supabase
   const { data: alerts } = await supabase
     .from('alerts')
     .select('*')
@@ -23,7 +21,6 @@ export default async function WatchlistPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">My Watchlist</h1>
@@ -31,10 +28,9 @@ export default async function WatchlistPage() {
             Track your favourite stocks and set price alerts
           </p>
         </div>
-        <AddToWatchlistForm userId={userId} />
+        <AddToWatchlistForm />
       </div>
 
-      {/* Watchlist grid */}
       {watchlist && watchlist.length > 0 ? (
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {watchlist.map((item) => (
@@ -42,7 +38,6 @@ export default async function WatchlistPage() {
               key={item.id}
               item={item}
               alerts={alerts?.filter((a) => a.symbol === item.symbol) ?? []}
-              userId={userId}
             />
           ))}
         </section>

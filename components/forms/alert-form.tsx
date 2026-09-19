@@ -12,11 +12,10 @@ interface AlertFormData {
 
 interface AlertFormProps {
   symbol: string
-  userId: string
   onSuccess: () => void
 }
 
-export default function AlertForm({ symbol, userId, onSuccess }: AlertFormProps) {
+export default function AlertForm({ symbol, onSuccess }: AlertFormProps) {
   const {
     register,
     handleSubmit,
@@ -26,7 +25,7 @@ export default function AlertForm({ symbol, userId, onSuccess }: AlertFormProps)
   })
 
   const onSubmit = async (data: AlertFormData) => {
-    const result = await addAlert({ userId, symbol, ...data })
+    const result = await addAlert({ symbol, ...data })
     if (result.success) {
       toast.success(`Alert set for ${symbol}!`)
       onSuccess()
