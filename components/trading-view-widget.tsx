@@ -25,52 +25,41 @@ export default function TradingViewWidget({
     const container = containerRef.current
     if (!container) return
 
-    container.innerHTML = ''
-    delete container.dataset.loaded
+    container.replaceChildren()
 
     const widgetContainer = document.createElement('div')
     widgetContainer.className = 'tradingview-widget-container__widget'
     widgetContainer.style.width = '100%'
     widgetContainer.style.height = `${height}px`
-    container.appendChild(widgetContainer)
 
     const script = document.createElement('script')
     script.type = 'text/javascript'
     script.src = scriptUrl
     script.async = true
+    // TradingView's external-embedding scripts parse their own inline JSON.
+    // Do not append a second empty script or call TradingView.widget manually.
+    script.textContent = JSON.stringify({
+      ...config,
+      width: '100%',
+      height,
+      autosize: true,
+    })
 
-    script.onload = () => {
-      if (!window.TradingView) return
-
-      const initScript = document.createElement('script')
-      initScript.type = 'text/javascript'
-      initScript.textContent = `
-        new TradingView.widget({
-          ...${JSON.stringify({ ...config, width: '100%', height, autosize: true })}
-        });
-      `
-      container.appendChild(initScript)
-      container.dataset.loaded = 'true'
-    }
-
-    script.onerror = () => {
-      console.error('Failed to load TradingView script:', scriptUrl)
-    }
-
-    container.appendChild(script)
+    container.append(widgetContainer, script)
 
     return () => {
-      if (container) {
-        container.innerHTML = ''
-        delete container.dataset.loaded
-      }
+      container.replaceChildren()
     }
   }, [scriptUrl, configKey, height])
 
   return (
     <div className={cn('w-full', className)}>
       {title && <h3 className="text-lg font-semibold text-white mb-3">{title}</h3>}
-      <div ref={containerRef} className="tradingview-widget-container" style={{ height }} />
+      <div
+        ref={containerRef}
+        className="tradingview-widget-container"
+        style={{ height }}
+      />
     </div>
   )
 }
