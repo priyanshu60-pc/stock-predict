@@ -1,10 +1,10 @@
 'use server'
 
+import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { supabase } from '@/lib/supabase'
 
 interface AddAlertParams {
-  userId: string
   symbol: string
   alert_type: 'price' | 'volume'
   condition: 'above' | 'below'
@@ -13,12 +13,17 @@ interface AddAlertParams {
 
 export async function addAlert(params: AddAlertParams) {
   try {
+    const { userId } = await auth()
+    if (!userId) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
     const { error } = await supabase.from('alerts').insert({
-      user_id: params.userId,
-      symbol: params.symbol,
+      user_id: userId,
+      symbol: params.symbol.trim().toUpperCase(),
       alert_type: params.alert_type,
       condition: params.condition,
-      threshold: params.threshold,
+      threshold: Number(params.threshold),
       active: true,
     })
 
@@ -32,8 +37,13 @@ export async function addAlert(params: AddAlertParams) {
   }
 }
 
-export async function removeAlert(id: string, userId: string) {
+export async function removeAlert(id: string) {
   try {
+    const { userId } = await auth()
+    if (!userId) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
     const { error } = await supabase
       .from('alerts')
       .delete()

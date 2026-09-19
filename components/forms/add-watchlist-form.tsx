@@ -11,18 +11,18 @@ interface FormData {
   company_name: string
 }
 
-export default function AddToWatchlistForm({ userId }: { userId: string }) {
+export default function AddToWatchlistForm() {
   const [open, setOpen] = useState(false)
   const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
     const result = await addToWatchlist({
-      userId,
-      symbol: data.symbol.toUpperCase().trim(),
-      companyName: data.company_name.trim(),
+      symbol: data.symbol,
+      companyName: data.company_name,
     })
+
     if (result.success) {
-      toast.success(`${data.symbol.toUpperCase()} added to watchlist!`)
+      toast.success(`${data.symbol.toUpperCase().trim()} added to watchlist!`)
       reset()
       setOpen(false)
     } else {
